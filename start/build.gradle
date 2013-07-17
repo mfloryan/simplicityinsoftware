@@ -24,3 +24,7 @@ dependencies {
     compile 'org.clojure:clojure:1.4.0'
 	compile 'clj-drone:clj-drone:0.1.3'
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.6'
+}
