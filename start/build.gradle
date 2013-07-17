@@ -1,0 +1,26 @@
+buildscript {
+    repositories {
+        mavenRepo name: 'clojars', urls: 'http://clojars.org/repo'
+    }
+    dependencies {
+        classpath 'clojuresque:clojuresque:1.5.8'
+    }
+}
+
+group = 'com.simplicityitself'
+version = '1.0.0'
+
+apply plugin: 'clojure'
+
+warnOnReflection = true
+aotCompile = true
+
+repositories {
+    mavenCentral()
+    clojarsRepo()
+}
+
+dependencies {
+    compile 'org.clojure:clojure:1.4.0'
+	compile 'clj-drone:clj-drone:0.1.3'
+}
