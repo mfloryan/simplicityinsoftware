@@ -11,20 +11,20 @@ class DroneServiceSpecification extends Specification {
   def "exercise the drone service"() {
     given:
     def uut = new DroneService()
-    uut.drone = DroneBuilder.buildDrone()
+    uut.drone = drone()
 
     when:
     def status = uut.takeOffAndHoverForSeconds(4, 4)
 
-    status = uut.climbForSecondsAtSpecifiedRate(0.8f, 3)
+    status = uut.climbForSecondsAtSpecifiedRate(80, 3)
 
     uut.closeSession()
 
     then:
-    status?.get(Keyword.intern("altitude")) < 2
+    status?.get("altitude") > 6
   }
 
   Drone drone() {
-
+    new SimulDrone()
   }
 }

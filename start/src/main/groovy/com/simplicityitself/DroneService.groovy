@@ -13,6 +13,8 @@ import javax.mail.internet.MimeMessage
 @Slf4j
 class DroneService {
 
+
+  final static String toEmail = "david.dawson@simplicityitself.com"
   Drone drone
 
   DroneService() {
@@ -22,12 +24,8 @@ class DroneService {
     }
   }
 
-  // TODO Attempt to send an email if status indicates an emergency has occurred
-  // TODO Code to unpack the status' will be rife in here.
-  // TODO Add logging of commands such that they can be replayed 'in the future'
-
   def takeOffAndHoverForSeconds(int hoverSeconds, int takeOffSeconds) {
-    log.info("Taking off for [$takeOffSeconds] and hovering for [$hoverSeconds]")
+    log.debug "REPLAY: takeOffAndHoverForSeconds($hoverSeconds, $takeOffSeconds)"
     drone.initializeDrone()
     drone.takeOff(takeOffSeconds)
     drone.hover(hoverSeconds)
@@ -38,14 +36,27 @@ class DroneService {
     return status
   }
 
-  def climbForSecondsAtSpecifiedRate(float rate, int seconds) {
+  def climbForSecondsAtSpecifiedRate(int rate, int seconds) {
+    log.debug "REPLAY: climbForSecondsAtSpecifiedRate($rate, $seconds)"
     log.info "Climbing for $seconds at $rate"
-    drone.climb(seconds, rate)
+    drone.climb(seconds, (float) rate/ 100)
+
+   drone.currentStatus
   }
 
   def closeSession() {
     log.warn "Drone is instructed to land"
-    drone.land()
+
+    if (userOk()) {
+      drone.land()
+    } else {
+      log.error "Unable to land, user is not authorised."
+    }
+
+  }
+
+  boolean userOk() {
+    return System.properties["user.name"] == "david"
   }
 
   def flyShape() {
@@ -57,6 +68,10 @@ class DroneService {
     drone.spinRight(2, 0.7f)
 
     def status = drone.currentStatus
+
+    if (status.altitude < 1) {
+     drone.climb(3, 0.7f)
+    }
 
     drone.tiltFront(3, 0.6f)
     drone.spinRight(2, 0.7f)
@@ -78,7 +93,7 @@ class DroneService {
   }
 
   def sendMail(String subject, String messageText) {
-      final String to = "david.dawson@simplicityitself.com"
+
       final String username = "1dayworkshop@simplicityitself.com";
       final String password = "simplesoftware";
 
@@ -100,7 +115,7 @@ class DroneService {
         Message message = new MimeMessage(session);
         message.setFrom(new InternetAddress(username));
         message.setRecipients(Message.RecipientType.TO,
-            InternetAddress.parse(to));
+            InternetAddress.parse(toEmail));
         message.setSubject(subject);
         message.setText(messageText);
 

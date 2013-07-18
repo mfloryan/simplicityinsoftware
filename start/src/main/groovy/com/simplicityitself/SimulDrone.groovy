@@ -14,7 +14,7 @@ class SimulDrone implements Drone {
   boolean landed = true
   boolean initialised = false
 
-  final Map data = [height: 0,
+  final Map data = [
               pitch:0, //in degrees
               roll:0,  // in degrees
               yaw:0,  // in degrees
@@ -29,16 +29,18 @@ class SimulDrone implements Drone {
   }
 
   void checkInit() {
-    log.error "Drone is not initialised"
-    if (!initialised) throw new IllegalStateException("SimulDron is not initialied")
+    if (!initialised){
+      log.error "Drone is not initialised"
+      throw new IllegalStateException("SimulDron is not initialied")
+    }
   }
 
   @Override
-  void takeOff(int height) {
+  void takeOff(int altitude) {
     checkInit()
     landed = false
     doAfter(2) {
-      data.height = height
+      data.altitude = altitude
     }
   }
 
@@ -54,7 +56,7 @@ class SimulDrone implements Drone {
     checkInit()
 
     doAfter(seconds) {
-      data.height = rateOfClimb * seconds
+      data.altitude += rateOfClimb * seconds
     }
   }
 
@@ -92,6 +94,7 @@ class SimulDrone implements Drone {
   @Override
   void up(int seconds, float power) {
     checkInit()
+    climb(seconds, power)
   }
 
   @Override
@@ -99,7 +102,7 @@ class SimulDrone implements Drone {
     checkInit()
 
     doAfter(seconds) {
-      data.height = 0
+      data.altitude -= seconds * power
     }
   }
 
@@ -140,11 +143,11 @@ class SimulDrone implements Drone {
   }
 
   void doAfter(int seconds, Closure exec) {
-    Thread.start {
-      synchronized (data) {
-        data.wait(seconds * 1000)
+    //Thread.start {
+    //  synchronized (data) {
+    //    data.wait(seconds * 1000)
         exec()
-      }
-    }
+//      }
+//    }
   }
 }
