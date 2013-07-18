@@ -2,7 +2,8 @@
   (:require [clj-drone.core :refer :all]
             [clj-drone.navdata :refer :all])
   (:gen-class
-    :name com.simplicityitself.Drone
+    :name com.simplicityitself.RealDrone
+    :implements [com.simplicityitself.Drone]
     :methods [[initializeDrone [] void]
               [takeOff [int] void]
               [hover [int] void]
@@ -21,8 +22,30 @@
 (defn -hover [this seconds]
   (drone-do-for seconds :hover))
 
-(defn -climb [this seconds rateOfClimb]
-  (drone-do-for seconds :up rateOfClimb))
+(defn -spinRight [this seconds rateOfClimb]
+  (drone-do-for seconds :spin-right rateOfClimb))
+
+(defn -spinLeft [this seconds power]
+  (drone-do-for seconds :spin-left power))
+
+(defn -up [this seconds power]
+  (drone-do-for seconds :up power))
+
+(defn -down [this seconds power]
+  (drone-do-for seconds :down power))
+
+(defn -tiltFront [this seconds power]
+  (drone-do-for seconds :tilt-front power))
+
+(defn -tiltBack [this seconds power]
+  (drone-do-for seconds :tilt-back power))
+
+(defn -tiltLeft [this seconds power]
+  (drone-do-for seconds :tilt-left power))
+
+(defn -tiltRight [this seconds power]
+  (drone-do-for seconds :tilt-right power))
+
 
 (defn -getCurrentStatus [this]
 

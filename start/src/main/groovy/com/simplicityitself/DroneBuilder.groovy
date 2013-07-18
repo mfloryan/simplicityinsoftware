@@ -2,7 +2,7 @@ package com.simplicityitself
 
 class DroneBuilder {
 
-    def static buildDrone() {
-        new Drone()
-    }
+  def static buildDrone() {
+    new SimulDrone()
+  }
 }
