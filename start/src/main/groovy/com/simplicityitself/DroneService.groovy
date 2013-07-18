@@ -1,11 +1,18 @@
 package com.simplicityitself
 
+import groovy.jmx.builder.JmxBuilder
 import groovy.util.logging.Slf4j
 
 @Slf4j
 class DroneService {
 
    Drone drone
+
+  DroneService() {
+    new JmxBuilder().export {
+      bean(this)
+    }
+  }
 
     // TODO Expose these methods to JMX for 'integration' purposes
     // TODO Attempt to send an email if status indicates an emergency has occurred
