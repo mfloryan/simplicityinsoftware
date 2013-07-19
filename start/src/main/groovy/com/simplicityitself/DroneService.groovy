@@ -1,26 +1,27 @@
 package com.simplicityitself
 
+import com.simplicityitself.commands.Command
+
 class DroneService {
 
   def emailService
-  def eventLog
+  def flightLog
   def loggingService
   def authorisationService
-
   Drone drone
 
-  DroneService(emailService, eventLog, loggingService, authorisationService, drone) {
+  DroneService(emailService, flightLog, loggingService, authorisationService, drone) {
     this.emailService = emailService
-    this.eventLog = eventLog
+    this.flightLog = flightLog
     this.loggingService = loggingService
     this.authorisationService = authorisationService
     this.drone = drone
   }
 
-  def takeOffAndHoverForSeconds(int hoverSeconds, int takeOffSeconds) {
-    eventLog.logTakeOff hoverSeconds, takeOffSeconds
+  def takeOffAndHoverForSeconds(int hoverSeconds, int takeOffHeight) {
+    flightLog.logTakeOff hoverSeconds, takeOffHeight
 
-    initialiseAndTakeOff(takeOffSeconds)
+    initialiseAndTakeOff(takeOffHeight)
 
     drone.hover(hoverSeconds)
 
@@ -29,7 +30,7 @@ class DroneService {
   }
 
   def climbForSecondsAtSpecifiedRate(int rate, int seconds) {
-    eventLog.logClimb(rate, seconds)
+    flightLog.logClimb(rate, seconds)
     loggingService.logClimbing(seconds, rate)
 
     drone.climb(seconds, (float) rate/ 100)
@@ -37,6 +38,7 @@ class DroneService {
     drone.currentStatus
   }
 
+  //
   def landIfAuthorised() {
     loggingService.logInstructedToLand()
 
@@ -44,6 +46,21 @@ class DroneService {
       { drone.land() },
       { loggingService.logUnauthorisedToLand()})
 
+  }
+
+  def execute(Command command) {
+
+    flightLog.Log(command.logEntry)
+
+    if (authorisationService.isAuthorised(command)) {
+      command.Execute()
+    } else {
+      // Log
+    }
+
+    def status = command.Execute()
+    NotifyForEmergency(status)
+    status
   }
 
 
