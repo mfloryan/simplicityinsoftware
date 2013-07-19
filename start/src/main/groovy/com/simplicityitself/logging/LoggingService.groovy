@@ -1,13 +1,10 @@
 package com.simplicityitself.logging
 
+import com.simplicityitself.commands.Command
 import groovy.util.logging.Slf4j
 
 @Slf4j
 class LoggingService {
-
-  public void logUnauthorisedToLand() {
-    log.error "Unable to land, user is not authorised."
-  }
 
   public void logInstructedToFlyAShape() {
     log.info("Drone instructed to fly in a shape")
@@ -21,5 +18,11 @@ class LoggingService {
     log.info "Climbing for $seconds at $rate"
   }
 
+  def LogUnauthorised(command) {
+    log.error "Not authorised to execute " + command
+  }
 
+  def LogExecution(command) {
+    log.info "Executing " + command
+  }
 }

@@ -1,10 +1,12 @@
 package com.simplicityitself.commands
 
+import com.simplicityitself.logging.LoggingService
+
 class Executor {
 
   def emailService
   def flightLog
-  def loggingService
+  LoggingService loggingService
   def authorisationService
 
   Executor(emailService, flightLog, loggingService, authorisationService) {
@@ -19,9 +21,10 @@ class Executor {
     flightLog.Log(command.logEntry)
 
     if (authorisationService.isAuthorised(command)) {
+      loggingService.LogExecution(command)
       command.Execute()
     } else {
-      // Log
+      loggingService.LogUnauthorised(command);
     }
 
     def status = command.Execute()
