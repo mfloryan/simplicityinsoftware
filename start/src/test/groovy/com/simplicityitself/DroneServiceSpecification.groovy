@@ -2,7 +2,7 @@ package com.simplicityitself
 
 import com.simplicityitself.authorisation.AuthorisationService
 import com.simplicityitself.email.EmailService
-import com.simplicityitself.events.EventLog
+import com.simplicityitself.events.FlightLog
 import com.simplicityitself.logging.LoggingService
 import com.simplicityitself.remoting.RemotingService
 import spock.lang.Specification
@@ -16,14 +16,13 @@ class DroneServiceSpecification extends Specification {
     given:
     def uut = new DroneService(
             new EmailService(),
-            new EventLog(),
+            new FlightLog(),
             new LoggingService(),
-            new AuthorisationService()
+            new AuthorisationService(),
+            drone()
     )
 
     new RemotingService().registerBean(uut);
-
-    uut.drone = drone()
 
     when:
     def status = uut.takeOffAndHoverForSeconds(4, 4)

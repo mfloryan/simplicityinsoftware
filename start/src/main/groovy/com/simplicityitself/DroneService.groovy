@@ -9,11 +9,12 @@ class DroneService {
 
   Drone drone
 
-  DroneService(emailService, eventLog, loggingService, authrisationService) {
+  DroneService(emailService, eventLog, loggingService, authrisationService, drone) {
     this.emailService = emailService
     this.eventLog = eventLog
     this.loggingService = loggingService
     this.authorisationService = authrisationService
+    this.drone = drone
   }
 
   def takeOffAndHoverForSeconds(int hoverSeconds, int takeOffSeconds) {
