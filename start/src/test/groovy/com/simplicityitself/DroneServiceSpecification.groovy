@@ -1,6 +1,5 @@
 package com.simplicityitself
 
-import clojure.lang.Keyword
 import spock.lang.Specification
 
 class DroneServiceSpecification extends Specification {

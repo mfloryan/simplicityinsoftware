@@ -1,7 +1,6 @@
 Simplicity in Software 1-day Workshop
 =====================================
 
-Tools needed:
+cd start
 
-- Gradle (1.6) : http://www.gradle.org
-
+./gradlew test
