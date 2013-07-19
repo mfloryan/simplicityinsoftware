@@ -1,4 +1,4 @@
-package com.simplicityitself.commands
+package com.simplicityitself.core.commands
 
 import com.simplicityitself.Drone
 

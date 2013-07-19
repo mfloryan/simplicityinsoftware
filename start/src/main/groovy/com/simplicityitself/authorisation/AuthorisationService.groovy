@@ -1,6 +1,6 @@
 package com.simplicityitself.authorisation
 
-import com.simplicityitself.commands.Command
+import com.simplicityitself.core.commands.Command
 
 
 class AuthorisationService {

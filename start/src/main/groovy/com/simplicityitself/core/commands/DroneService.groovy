@@ -1,6 +1,7 @@
-package com.simplicityitself
+package com.simplicityitself.core.commands
 
-import com.simplicityitself.commands.*
+import com.simplicityitself.Drone
+import com.simplicityitself.core.commands.*
 
 class DroneService {
 

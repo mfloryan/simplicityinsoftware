@@ -1,6 +1,5 @@
 package com.simplicityitself.logging
 
-import com.simplicityitself.commands.Command
 import groovy.util.logging.Slf4j
 
 @Slf4j

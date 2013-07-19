@@ -1,7 +1,8 @@
 package com.simplicityitself
 
 import com.simplicityitself.authorisation.AuthorisationService
-import com.simplicityitself.commands.Executor
+import com.simplicityitself.core.commands.DroneService
+import com.simplicityitself.core.commands.Executor
 import com.simplicityitself.email.EmailService
 import com.simplicityitself.events.FlightLog
 import com.simplicityitself.logging.LoggingService

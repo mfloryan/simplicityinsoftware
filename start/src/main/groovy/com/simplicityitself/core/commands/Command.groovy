@@ -1,4 +1,4 @@
-package com.simplicityitself.commands
+package com.simplicityitself.core.commands
 
 public interface Command {
   public Map Execute()
