@@ -2,6 +2,7 @@ package com.simplicityitself
 
 import com.simplicityitself.email.EmailService
 import com.simplicityitself.events.EventLog
+import com.simplicityitself.logging.LoggingService
 import spock.lang.Specification
 
 class DroneServiceSpecification extends Specification {
@@ -13,8 +14,8 @@ class DroneServiceSpecification extends Specification {
     given:
     def uut = new DroneService(
             new EmailService(),
-            new EventLog()
-
+            new EventLog(),
+            new LoggingService()
     )
     uut.drone = drone()
 

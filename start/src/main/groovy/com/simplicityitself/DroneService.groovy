@@ -1,20 +1,20 @@
 package com.simplicityitself
 
 import groovy.jmx.builder.JmxBuilder
-import groovy.util.logging.Slf4j
 
-
-@Slf4j
 class DroneService {
 
   def emailService
   def eventLog
+  def loggingService
 
   Drone drone
 
-  DroneService(emailService, eventLog) {
+  DroneService(emailService, eventLog, loggingService) {
     this.emailService = emailService
     this.eventLog = eventLog
+    this.loggingService = loggingService
+
     //expose this on JMX
     new JmxBuilder().export {
       bean(this)
@@ -36,30 +36,33 @@ class DroneService {
 
   def climbForSecondsAtSpecifiedRate(int rate, int seconds) {
     eventLog.logClimb(rate, seconds)
-    log.info "Climbing for $seconds at $rate"
+    loggingService.logClimbing(seconds, rate)
     drone.climb(seconds, (float) rate/ 100)
 
     drone.currentStatus
   }
 
 
+
   def closeSession() {
-    log.warn "Drone is instructed to land"
+    loggingService.logInstructedToLand()
 
     if (userOk()) {
       drone.land()
     } else {
-      log.error "Unable to land, user is not authorised."
+      loggingService.logUnauthorisedToLand()
     }
 
   }
+
+
 
   boolean userOk() {
     return System.properties["user.name"] == "mfloryan"
   }
 
   def flyShape() {
-    log.info("Drone instructed to fly in a shape")
+    loggingService.logInstructedToFlyAShape()
 
     drone.initializeDrone()
     drone.takeOff(2)
@@ -90,5 +93,4 @@ class DroneService {
 
     return status
   }
-
 }
