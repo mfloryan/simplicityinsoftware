@@ -1,5 +1,7 @@
 package com.simplicityitself.authorisation
 
+import com.simplicityitself.commands.Command
+
 
 class AuthorisationService {
 
@@ -7,8 +9,8 @@ class AuthorisationService {
     return System.properties["user.name"] == "mfloryan"
   }
 
-  void executeWhenAuthorisedToLand(Closure whenOK, Closure whenFailed) {
-    if (userOk()) whenOK() else whenFailed();
+  def boolean isAuthorised(Command command) {
+    userOk()
   }
 
 }

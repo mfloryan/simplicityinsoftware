@@ -1,6 +1,6 @@
 package com.simplicityitself
 
-import com.simplicityitself.commands.Command
+import com.simplicityitself.commands.*
 
 class DroneService {
 
@@ -19,33 +19,26 @@ class DroneService {
   }
 
   def takeOffAndHoverForSeconds(int hoverSeconds, int takeOffHeight) {
-    flightLog.logTakeOff hoverSeconds, takeOffHeight
+    def takeOff = new TakeOff(drone, takeOffHeight);
+    def hover = new Hover(drone, hoverSeconds);
 
-    initialiseAndTakeOff(takeOffHeight)
-
-    drone.hover(hoverSeconds)
-
-    NotifyForEmergency(drone.getCurrentStatus())
-    return drone.getCurrentStatus()
+    execute(takeOff, hover)
   }
 
   def climbForSecondsAtSpecifiedRate(int rate, int seconds) {
-    flightLog.logClimb(rate, seconds)
-    loggingService.logClimbing(seconds, rate)
-
-    drone.climb(seconds, (float) rate/ 100)
-
-    drone.currentStatus
+    execute(new Climb(drone, rate, seconds))
   }
 
-  //
   def landIfAuthorised() {
-    loggingService.logInstructedToLand()
+    execute(new Land(drone))
+  }
 
-    authorisationService.executeWhenAuthorisedToLand(
-      { drone.land() },
-      { loggingService.logUnauthorisedToLand()})
+  def flyShape() {
+    def takeOff = new TakeOff(drone)
+    def flyShape = new FlyShape(drone)
+    def land = new Land(drone)
 
+    execute( takeOff, flyShape, land)
   }
 
   def execute(Command command) {
@@ -63,34 +56,13 @@ class DroneService {
     status
   }
 
-
-  def flyShape() {
-    loggingService.logInstructedToFlyAShape()
-
-    initialiseAndTakeOff(2)
-    tiltAndSpin()
-
-    def status = drone.currentStatus
-
-    if (status.altitude < 1) {
-     drone.climb(3, 0.7f)
+  def execute(Command... commands) {
+    def status
+    commands.each { c ->
+      status = execute(c)
     }
-
-    3.times {
-      tiltAndSpin()
-    }
-
-    drone.land()
-
-    NotifyForEmergency(drone.getCurrentStatus())
-    drone.getCurrentStatus()
+    status
   }
-
-  private initialiseAndTakeOff(int takeoffHeight) {
-    drone.initializeDrone()
-    drone.takeOff(takeoffHeight)
-  }
-
 
   private NotifyForEmergency(Map droneStatus) {
     if (droneStatus.get("emergency") == "detected") {

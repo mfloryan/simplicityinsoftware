@@ -26,6 +26,4 @@ class FlyShape extends BaseCommand {
     drone.tiltFront(3, 0.6f)
     drone.spinRight(2, 0.7f)
   }
-
-
 }

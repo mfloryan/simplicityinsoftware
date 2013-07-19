@@ -13,4 +13,8 @@ class FlightLog {
     log.debug "REPLAY: climbForSecondsAtSpecifiedRate($rate, $seconds)"
   }
 
+  public void Log(logObject) {
+    log.debug logObject.toString();
+  }
+
 }
