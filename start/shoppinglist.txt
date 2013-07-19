@@ -1,0 +1,14 @@
+TODO:
+
+* Move sending emails out
+* UserOK ?
+* Drone Service - lots of convenience methods
+* flyShape - more descriptive
+* logging
+* how is drone configured?
+* flight session
+* Drone - get current status (opaque) - Map?
+* Drone - initialise
+* Drone - too many flight related methods
+* Drone - tilt?
+* Drone -

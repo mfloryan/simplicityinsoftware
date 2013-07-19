@@ -3,21 +3,15 @@ package com.simplicityitself
 import groovy.jmx.builder.JmxBuilder
 import groovy.util.logging.Slf4j
 
-import javax.mail.Message
-import javax.mail.MessagingException
-import javax.mail.Session
-import javax.mail.Transport
-import javax.mail.internet.InternetAddress
-import javax.mail.internet.MimeMessage
 
 @Slf4j
 class DroneService {
 
-
-  final static String toEmail = "david.dawson@simplicityitself.com"
+  def emailService
   Drone drone
 
-  DroneService() {
+  DroneService(emailService) {
+    this.emailService = emailService
     //expose this on JMX
     new JmxBuilder().export {
       bean(this)
@@ -31,7 +25,7 @@ class DroneService {
     drone.hover(hoverSeconds)
     def status = drone.getCurrentStatus()
     if (status.get("emergency") == "detected") {
-      sendMail("Emergency Detected", "We detected an emergency condition on the drone.")
+      emailService.sendMail("Emergency Detected", "We detected an emergency condition on the drone.")
     }
     return status
   }
@@ -41,7 +35,7 @@ class DroneService {
     log.info "Climbing for $seconds at $rate"
     drone.climb(seconds, (float) rate/ 100)
 
-   drone.currentStatus
+    drone.currentStatus
   }
 
   def closeSession() {
@@ -86,45 +80,10 @@ class DroneService {
 
     status = drone.getCurrentStatus()
     if (status.get("emergency") == "detected") {
-      sendMail("Emergency Detected", "We detected an emergency condition on the drone.")
+      emailService.sendMail("Emergency Detected", "We detected an emergency condition on the drone.")
     }
 
     return status
   }
 
-  def sendMail(String subject, String messageText) {
-
-      final String username = "1dayworkshop@simplicityitself.com";
-      final String password = "simplesoftware";
-
-      Properties props = new Properties();
-      props.put("mail.smtp.auth", "true");
-      props.put("mail.smtp.starttls.enable", "true");
-      props.put("mail.smtp.host", "smtp.gmail.com");
-      props.put("mail.smtp.port", "587");
-
-      Session session = Session.getInstance(props,
-          new javax.mail.Authenticator() {
-            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
-              return new javax.mail.PasswordAuthentication(username, password);
-            }
-          });
-
-      try {
-
-        Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(username));
-        message.setRecipients(Message.RecipientType.TO,
-            InternetAddress.parse(toEmail));
-        message.setSubject(subject);
-        message.setText(messageText);
-
-        Transport.send(message);
-
-        log.debug "Sent message $subject"
-
-      } catch (MessagingException e) {
-        throw new RuntimeException(e);
-      }
-    }
 }
