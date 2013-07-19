@@ -8,10 +8,13 @@ import groovy.util.logging.Slf4j
 class DroneService {
 
   def emailService
+  def eventLog
+
   Drone drone
 
-  DroneService(emailService) {
+  DroneService(emailService, eventLog) {
     this.emailService = emailService
+    this.eventLog = eventLog
     //expose this on JMX
     new JmxBuilder().export {
       bean(this)
@@ -19,7 +22,7 @@ class DroneService {
   }
 
   def takeOffAndHoverForSeconds(int hoverSeconds, int takeOffSeconds) {
-    log.debug "REPLAY: takeOffAndHoverForSeconds($hoverSeconds, $takeOffSeconds)"
+    eventLog.logTakeOff hoverSeconds, takeOffSeconds
     drone.initializeDrone()
     drone.takeOff(takeOffSeconds)
     drone.hover(hoverSeconds)
@@ -30,13 +33,15 @@ class DroneService {
     return status
   }
 
+
   def climbForSecondsAtSpecifiedRate(int rate, int seconds) {
-    log.debug "REPLAY: climbForSecondsAtSpecifiedRate($rate, $seconds)"
+    eventLog.logClimb(rate, seconds)
     log.info "Climbing for $seconds at $rate"
     drone.climb(seconds, (float) rate/ 100)
 
     drone.currentStatus
   }
+
 
   def closeSession() {
     log.warn "Drone is instructed to land"
