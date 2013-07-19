@@ -56,7 +56,7 @@ class DroneService {
   }
 
   boolean userOk() {
-    return System.properties["user.name"] == "david"
+    return System.properties["user.name"] == "mfloryan"
   }
 
   def flyShape() {
