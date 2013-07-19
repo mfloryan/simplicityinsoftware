@@ -9,11 +9,11 @@ class DroneService {
 
   Drone drone
 
-  DroneService(emailService, eventLog, loggingService, authrisationService, drone) {
+  DroneService(emailService, eventLog, loggingService, authorisationService, drone) {
     this.emailService = emailService
     this.eventLog = eventLog
     this.loggingService = loggingService
-    this.authorisationService = authrisationService
+    this.authorisationService = authorisationService
     this.drone = drone
   }
 
