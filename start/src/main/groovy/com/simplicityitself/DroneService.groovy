@@ -22,11 +22,14 @@ class DroneService {
     drone.initializeDrone()
     drone.takeOff(takeOffSeconds)
     drone.hover(hoverSeconds)
-    def status = drone.getCurrentStatus()
-    if (status.get("emergency") == "detected") {
+    NotifyForEmergency(drone.getCurrentStatus())
+    return drone.getCurrentStatus()
+  }
+
+  private NotifyForEmergency(Map droneStatus) {
+    if (droneStatus.get("emergency") == "detected") {
       emailService.sendMail("Emergency Detected", "We detected an emergency condition on the drone.")
     }
-    return status
   }
 
 
@@ -53,8 +56,7 @@ class DroneService {
 
     drone.initializeDrone()
     drone.takeOff(2)
-    drone.tiltFront(3, 0.6f)
-    drone.spinRight(2, 0.7f)
+    tiltAndSpin()
 
     def status = drone.currentStatus
 
@@ -62,22 +64,18 @@ class DroneService {
      drone.climb(3, 0.7f)
     }
 
-    drone.tiltFront(3, 0.6f)
-    drone.spinRight(2, 0.7f)
-
-    drone.tiltFront(3, 0.6f)
-    drone.spinRight(2, 0.7f)
-
-    drone.tiltFront(3, 0.6f)
-    drone.spinRight(2, 0.7f)
+    3.times {
+      tiltAndSpin()
+    }
 
     drone.land()
 
-    status = drone.getCurrentStatus()
-    if (status.get("emergency") == "detected") {
-      emailService.sendMail("Emergency Detected", "We detected an emergency condition on the drone.")
-    }
+    NotifyForEmergency(drone.getCurrentStatus())
+    drone.getCurrentStatus()
+  }
 
-    return status
+  public void tiltAndSpin() {
+    drone.tiltFront(3, 0.6f)
+    drone.spinRight(2, 0.7f)
   }
 }
