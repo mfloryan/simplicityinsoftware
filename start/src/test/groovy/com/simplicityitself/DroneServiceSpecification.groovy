@@ -1,5 +1,6 @@
 package com.simplicityitself
 
+import com.simplicityitself.authorisation.AuthorisationService
 import com.simplicityitself.email.EmailService
 import com.simplicityitself.events.EventLog
 import com.simplicityitself.logging.LoggingService
@@ -16,7 +17,8 @@ class DroneServiceSpecification extends Specification {
     def uut = new DroneService(
             new EmailService(),
             new EventLog(),
-            new LoggingService()
+            new LoggingService(),
+            new AuthorisationService()
     )
 
     new RemotingService().registerBean(uut);
@@ -28,7 +30,7 @@ class DroneServiceSpecification extends Specification {
 
     status = uut.climbForSecondsAtSpecifiedRate(80, 3)
 
-    uut.closeSession()
+    uut.landIfAuthorised()
 
     then:
     status?.get("altitude") > 6

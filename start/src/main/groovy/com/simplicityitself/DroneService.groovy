@@ -5,15 +5,15 @@ class DroneService {
   def emailService
   def eventLog
   def loggingService
+  def authorisationService
 
   Drone drone
 
-  DroneService(emailService, eventLog, loggingService) {
+  DroneService(emailService, eventLog, loggingService, authrisationService) {
     this.emailService = emailService
     this.eventLog = eventLog
     this.loggingService = loggingService
-
-
+    this.authorisationService = authrisationService
   }
 
   def takeOffAndHoverForSeconds(int hoverSeconds, int takeOffSeconds) {
@@ -37,24 +37,15 @@ class DroneService {
     drone.currentStatus
   }
 
-
-
-  def closeSession() {
+  def landIfAuthorised() {
     loggingService.logInstructedToLand()
 
-    if (userOk()) {
-      drone.land()
-    } else {
-      loggingService.logUnauthorisedToLand()
-    }
+    authorisationService.executeWhenAuthorisedToLand(
+      { drone.land() },
+      { loggingService.logUnauthorisedToLand()})
 
   }
 
-
-
-  boolean userOk() {
-    return System.properties["user.name"] == "mfloryan"
-  }
 
   def flyShape() {
     loggingService.logInstructedToFlyAShape()
