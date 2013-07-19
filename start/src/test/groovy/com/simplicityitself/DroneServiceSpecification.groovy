@@ -1,6 +1,7 @@
 package com.simplicityitself
 
 import com.simplicityitself.authorisation.AuthorisationService
+import com.simplicityitself.commands.Executor
 import com.simplicityitself.email.EmailService
 import com.simplicityitself.events.FlightLog
 import com.simplicityitself.logging.LoggingService
@@ -9,17 +10,21 @@ import spock.lang.Specification
 
 class DroneServiceSpecification extends Specification {
 
-
   // TODO Add before to load the application context to bring the components to life.
 
   def "exercise the drone service"() {
     given:
+
+    def executor = new Executor(
+      new EmailService(),
+      new FlightLog(),
+      new LoggingService(),
+      new AuthorisationService()
+    )
+
     def uut = new DroneService(
-            new EmailService(),
-            new FlightLog(),
-            new LoggingService(),
-            new AuthorisationService(),
-            drone()
+            drone(),
+            executor
     )
 
     new RemotingService().registerBean(uut);
