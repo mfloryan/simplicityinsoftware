@@ -10,6 +10,8 @@ class TakeOff extends BaseCommand {
     this.height = height
   }
 
+  def logEntry = "TakeOff $height"
+
   def action() {
     drone.initializeDrone()
     drone.takeOff(height)

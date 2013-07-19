@@ -8,6 +8,8 @@ class FlyShape extends BaseCommand {
     super(drone)
   }
 
+  def logEntry = "Fly Shape"
+
   def action() {
     tiltAndSpin()
 

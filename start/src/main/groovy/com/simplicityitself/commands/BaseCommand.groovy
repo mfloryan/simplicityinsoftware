@@ -10,8 +10,7 @@ abstract class BaseCommand implements Command {
     this.drone = drone
   }
 
-
-  def logEntry = "Log";
+  def abstract logEntry
 
   protected abstract action()
 

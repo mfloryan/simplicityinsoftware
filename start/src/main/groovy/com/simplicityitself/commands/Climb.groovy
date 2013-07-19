@@ -13,6 +13,8 @@ class Climb extends BaseCommand {
     this.seconds = seconds
   }
 
+  def logEntry = "Climb $rate, $seconds"
+
   def action() {
     // drone.climb(seconds, (float) rate/ 100)
     drone.climb(seconds, (float) rate/ 100)

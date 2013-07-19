@@ -14,4 +14,6 @@ class Hover extends BaseCommand {
     drone.hover(hoverSeconds)
   }
 
+  def logEntry = "Hover $hoverSeconds"
+
 }

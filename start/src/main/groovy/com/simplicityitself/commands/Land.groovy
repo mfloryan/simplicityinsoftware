@@ -8,6 +8,8 @@ class Land extends BaseCommand {
     super(drone)
   }
 
+  def logEntry = "Land"
+
   def action() {
     drone.land()
   }
