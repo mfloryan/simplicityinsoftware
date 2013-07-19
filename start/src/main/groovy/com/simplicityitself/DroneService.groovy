@@ -1,7 +1,5 @@
 package com.simplicityitself
 
-import groovy.jmx.builder.JmxBuilder
-
 class DroneService {
 
   def emailService
@@ -15,10 +13,7 @@ class DroneService {
     this.eventLog = eventLog
     this.loggingService = loggingService
 
-    //expose this on JMX
-    new JmxBuilder().export {
-      bean(this)
-    }
+
   }
 
   def takeOffAndHoverForSeconds(int hoverSeconds, int takeOffSeconds) {

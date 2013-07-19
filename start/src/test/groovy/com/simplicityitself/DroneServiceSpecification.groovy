@@ -3,6 +3,7 @@ package com.simplicityitself
 import com.simplicityitself.email.EmailService
 import com.simplicityitself.events.EventLog
 import com.simplicityitself.logging.LoggingService
+import com.simplicityitself.remoting.RemotingService
 import spock.lang.Specification
 
 class DroneServiceSpecification extends Specification {
@@ -17,6 +18,9 @@ class DroneServiceSpecification extends Specification {
             new EventLog(),
             new LoggingService()
     )
+
+    new RemotingService().registerBean(uut);
+
     uut.drone = drone()
 
     when:
